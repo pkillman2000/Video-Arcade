@@ -7,7 +7,11 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _runSpeed = 5f;
+    private GameObject _playerBody;
+    [SerializeField]
+    private float _walkSpeed = 5f;
+    [SerializeField]
+    private float _runSpeed = 10f;
     [SerializeField]
     private float _jumpSpeed = 5f;
     [SerializeField]
@@ -20,11 +24,13 @@ public class Player : MonoBehaviour
     // Walking
     private bool _walkingInput = false;
     private float _inputWalkingSpeed = 0f;
-    public bool _isTouchingGround = true;
+    private bool _isTouchingGround = true;
     // Climbing
     private bool _climbingInput = false;
     private float _inputClimbingSpeed = 0f;
-    public bool _isTouchingLadder = false;
+    private bool _isTouchingLadder = false;
+    // Running
+    private bool _isRunning = false;
 
     private Rigidbody _rigidBody;
     private CapsuleCollider _bodyCollider;
@@ -55,6 +61,10 @@ public class Player : MonoBehaviour
         _inputActions.Land.Climb.started += StartClimbing;
         _inputActions.Land.Climb.canceled += StopClimbing;
 
+        // Run
+        _inputActions.Land.Run.started += StartRunning;
+        _inputActions.Land.Run.canceled += Run_canceled;
+
         _rigidBody = GetComponent<Rigidbody>();
         if (_rigidBody == null)
         {
@@ -67,6 +77,7 @@ public class Player : MonoBehaviour
             Debug.LogError("Capsule Collider is Null!");
         }
     }
+
 
     void Update()
     {
@@ -110,13 +121,13 @@ public class Player : MonoBehaviour
         {
             _inputWalkingSpeed = 1f;
             // Flip player to right
-            transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            _playerBody.transform.eulerAngles = new Vector3(0f, 0f, 0f);
         }
         else if(obj.ReadValue<float>() < 0)
         {
             _inputWalkingSpeed = -1f;
             // Flip player to left
-            transform.eulerAngles = new Vector3(0f, 180f, 0f);
+            _playerBody.transform.eulerAngles = new Vector3(0f, 180f, 0f);
         }
         else
         {
@@ -143,8 +154,16 @@ public class Player : MonoBehaviour
         //{
             if (_walkingInput)
             {
-                Vector2 playerVelocity = new Vector2(_inputWalkingSpeed * _runSpeed, _rigidBody.velocity.y);
-                _rigidBody.velocity = playerVelocity;
+                if(_isRunning)
+                {
+                    Vector2 playerVelocity = new Vector2(_inputWalkingSpeed * _runSpeed, _rigidBody.velocity.y);
+                    _rigidBody.velocity = playerVelocity;
+                }
+                else
+                {
+                    Vector2 playerVelocity = new Vector2(_inputWalkingSpeed * _walkSpeed, _rigidBody.velocity.y);
+                    _rigidBody.velocity = playerVelocity;
+                }
             }
             else
             {
@@ -207,5 +226,18 @@ public class Player : MonoBehaviour
             Vector2 playerVelocity = new Vector2(_rigidBody.velocity.x, 0);
             _rigidBody.useGravity = true;
         }
+    }
+
+    // Running
+    private void StartRunning(InputAction.CallbackContext obj)
+    {
+        _isRunning = true;
+        Debug.Log("Running: " +  _isRunning);
+    }
+
+    private void Run_canceled(InputAction.CallbackContext obj)
+    {
+        _isRunning = false;
+        Debug.Log("Running: " + _isRunning);
     }
 }

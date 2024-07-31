@@ -53,6 +53,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""1150074b-7741-40c1-925b-a5f5e15fc9b9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -275,6 +284,28 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Climb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d617c855-f032-4e01-a6c7-dacb9e928ceb"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83051b25-18d6-4397-92a3-5ee6f95af129"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -342,6 +373,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Land_Jump = m_Land.FindAction("Jump", throwIfNotFound: true);
         m_Land_Walk = m_Land.FindAction("Walk", throwIfNotFound: true);
         m_Land_Climb = m_Land.FindAction("Climb", throwIfNotFound: true);
+        m_Land_Run = m_Land.FindAction("Run", throwIfNotFound: true);
         // Air
         m_Air = asset.FindActionMap("Air", throwIfNotFound: true);
         m_Air_Newaction = m_Air.FindAction("New action", throwIfNotFound: true);
@@ -412,6 +444,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Land_Jump;
     private readonly InputAction m_Land_Walk;
     private readonly InputAction m_Land_Climb;
+    private readonly InputAction m_Land_Run;
     public struct LandActions
     {
         private @InputActions m_Wrapper;
@@ -419,6 +452,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Land_Jump;
         public InputAction @Walk => m_Wrapper.m_Land_Walk;
         public InputAction @Climb => m_Wrapper.m_Land_Climb;
+        public InputAction @Run => m_Wrapper.m_Land_Run;
         public InputActionMap Get() { return m_Wrapper.m_Land; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -437,6 +471,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Climb.started += instance.OnClimb;
             @Climb.performed += instance.OnClimb;
             @Climb.canceled += instance.OnClimb;
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
         }
 
         private void UnregisterCallbacks(ILandActions instance)
@@ -450,6 +487,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Climb.started -= instance.OnClimb;
             @Climb.performed -= instance.OnClimb;
             @Climb.canceled -= instance.OnClimb;
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
         }
 
         public void RemoveCallbacks(ILandActions instance)
@@ -564,6 +604,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnWalk(InputAction.CallbackContext context);
         void OnClimb(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
     public interface IAirActions
     {
