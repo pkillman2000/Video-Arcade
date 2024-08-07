@@ -15,12 +15,14 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public partial class @InputActions: IInputActionCollection2, IDisposable
+namespace Platformer.Movement
 {
-    public InputActionAsset asset { get; }
-    public @InputActions()
+    public partial class @InputActions: IInputActionCollection2, IDisposable
     {
-        asset = InputActionAsset.FromJson(@"{
+        public InputActionAsset asset { get; }
+        public @InputActions()
+        {
+            asset = InputActionAsset.FromJson(@"{
     ""name"": ""Input Actions"",
     ""maps"": [
         {
@@ -154,7 +156,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""GamePad"",
+                    ""name"": ""Left Stick [Gamepad]"",
                     ""id"": ""f35e113e-589d-4624-ad8a-7e062f63b297"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -368,250 +370,251 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": []
 }");
+            // Land
+            m_Land = asset.FindActionMap("Land", throwIfNotFound: true);
+            m_Land_Jump = m_Land.FindAction("Jump", throwIfNotFound: true);
+            m_Land_Walk = m_Land.FindAction("Walk", throwIfNotFound: true);
+            m_Land_Climb = m_Land.FindAction("Climb", throwIfNotFound: true);
+            m_Land_Run = m_Land.FindAction("Run", throwIfNotFound: true);
+            // Air
+            m_Air = asset.FindActionMap("Air", throwIfNotFound: true);
+            m_Air_Newaction = m_Air.FindAction("New action", throwIfNotFound: true);
+            // Water
+            m_Water = asset.FindActionMap("Water", throwIfNotFound: true);
+            m_Water_Newaction = m_Water.FindAction("New action", throwIfNotFound: true);
+        }
+
+        public void Dispose()
+        {
+            UnityEngine.Object.Destroy(asset);
+        }
+
+        public InputBinding? bindingMask
+        {
+            get => asset.bindingMask;
+            set => asset.bindingMask = value;
+        }
+
+        public ReadOnlyArray<InputDevice>? devices
+        {
+            get => asset.devices;
+            set => asset.devices = value;
+        }
+
+        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+        public bool Contains(InputAction action)
+        {
+            return asset.Contains(action);
+        }
+
+        public IEnumerator<InputAction> GetEnumerator()
+        {
+            return asset.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Enable()
+        {
+            asset.Enable();
+        }
+
+        public void Disable()
+        {
+            asset.Disable();
+        }
+
+        public IEnumerable<InputBinding> bindings => asset.bindings;
+
+        public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
+        {
+            return asset.FindAction(actionNameOrId, throwIfNotFound);
+        }
+
+        public int FindBinding(InputBinding bindingMask, out InputAction action)
+        {
+            return asset.FindBinding(bindingMask, out action);
+        }
+
         // Land
-        m_Land = asset.FindActionMap("Land", throwIfNotFound: true);
-        m_Land_Jump = m_Land.FindAction("Jump", throwIfNotFound: true);
-        m_Land_Walk = m_Land.FindAction("Walk", throwIfNotFound: true);
-        m_Land_Climb = m_Land.FindAction("Climb", throwIfNotFound: true);
-        m_Land_Run = m_Land.FindAction("Run", throwIfNotFound: true);
+        private readonly InputActionMap m_Land;
+        private List<ILandActions> m_LandActionsCallbackInterfaces = new List<ILandActions>();
+        private readonly InputAction m_Land_Jump;
+        private readonly InputAction m_Land_Walk;
+        private readonly InputAction m_Land_Climb;
+        private readonly InputAction m_Land_Run;
+        public struct LandActions
+        {
+            private @InputActions m_Wrapper;
+            public LandActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Jump => m_Wrapper.m_Land_Jump;
+            public InputAction @Walk => m_Wrapper.m_Land_Walk;
+            public InputAction @Climb => m_Wrapper.m_Land_Climb;
+            public InputAction @Run => m_Wrapper.m_Land_Run;
+            public InputActionMap Get() { return m_Wrapper.m_Land; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(LandActions set) { return set.Get(); }
+            public void AddCallbacks(ILandActions instance)
+            {
+                if (instance == null || m_Wrapper.m_LandActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_LandActionsCallbackInterfaces.Add(instance);
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
+                @Walk.started += instance.OnWalk;
+                @Walk.performed += instance.OnWalk;
+                @Walk.canceled += instance.OnWalk;
+                @Climb.started += instance.OnClimb;
+                @Climb.performed += instance.OnClimb;
+                @Climb.canceled += instance.OnClimb;
+                @Run.started += instance.OnRun;
+                @Run.performed += instance.OnRun;
+                @Run.canceled += instance.OnRun;
+            }
+
+            private void UnregisterCallbacks(ILandActions instance)
+            {
+                @Jump.started -= instance.OnJump;
+                @Jump.performed -= instance.OnJump;
+                @Jump.canceled -= instance.OnJump;
+                @Walk.started -= instance.OnWalk;
+                @Walk.performed -= instance.OnWalk;
+                @Walk.canceled -= instance.OnWalk;
+                @Climb.started -= instance.OnClimb;
+                @Climb.performed -= instance.OnClimb;
+                @Climb.canceled -= instance.OnClimb;
+                @Run.started -= instance.OnRun;
+                @Run.performed -= instance.OnRun;
+                @Run.canceled -= instance.OnRun;
+            }
+
+            public void RemoveCallbacks(ILandActions instance)
+            {
+                if (m_Wrapper.m_LandActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(ILandActions instance)
+            {
+                foreach (var item in m_Wrapper.m_LandActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_LandActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public LandActions @Land => new LandActions(this);
+
         // Air
-        m_Air = asset.FindActionMap("Air", throwIfNotFound: true);
-        m_Air_Newaction = m_Air.FindAction("New action", throwIfNotFound: true);
+        private readonly InputActionMap m_Air;
+        private List<IAirActions> m_AirActionsCallbackInterfaces = new List<IAirActions>();
+        private readonly InputAction m_Air_Newaction;
+        public struct AirActions
+        {
+            private @InputActions m_Wrapper;
+            public AirActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Newaction => m_Wrapper.m_Air_Newaction;
+            public InputActionMap Get() { return m_Wrapper.m_Air; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(AirActions set) { return set.Get(); }
+            public void AddCallbacks(IAirActions instance)
+            {
+                if (instance == null || m_Wrapper.m_AirActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_AirActionsCallbackInterfaces.Add(instance);
+                @Newaction.started += instance.OnNewaction;
+                @Newaction.performed += instance.OnNewaction;
+                @Newaction.canceled += instance.OnNewaction;
+            }
+
+            private void UnregisterCallbacks(IAirActions instance)
+            {
+                @Newaction.started -= instance.OnNewaction;
+                @Newaction.performed -= instance.OnNewaction;
+                @Newaction.canceled -= instance.OnNewaction;
+            }
+
+            public void RemoveCallbacks(IAirActions instance)
+            {
+                if (m_Wrapper.m_AirActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IAirActions instance)
+            {
+                foreach (var item in m_Wrapper.m_AirActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_AirActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public AirActions @Air => new AirActions(this);
+
         // Water
-        m_Water = asset.FindActionMap("Water", throwIfNotFound: true);
-        m_Water_Newaction = m_Water.FindAction("New action", throwIfNotFound: true);
-    }
-
-    public void Dispose()
-    {
-        UnityEngine.Object.Destroy(asset);
-    }
-
-    public InputBinding? bindingMask
-    {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
-    }
-
-    public ReadOnlyArray<InputDevice>? devices
-    {
-        get => asset.devices;
-        set => asset.devices = value;
-    }
-
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-    public bool Contains(InputAction action)
-    {
-        return asset.Contains(action);
-    }
-
-    public IEnumerator<InputAction> GetEnumerator()
-    {
-        return asset.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    public void Enable()
-    {
-        asset.Enable();
-    }
-
-    public void Disable()
-    {
-        asset.Disable();
-    }
-
-    public IEnumerable<InputBinding> bindings => asset.bindings;
-
-    public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
-    {
-        return asset.FindAction(actionNameOrId, throwIfNotFound);
-    }
-
-    public int FindBinding(InputBinding bindingMask, out InputAction action)
-    {
-        return asset.FindBinding(bindingMask, out action);
-    }
-
-    // Land
-    private readonly InputActionMap m_Land;
-    private List<ILandActions> m_LandActionsCallbackInterfaces = new List<ILandActions>();
-    private readonly InputAction m_Land_Jump;
-    private readonly InputAction m_Land_Walk;
-    private readonly InputAction m_Land_Climb;
-    private readonly InputAction m_Land_Run;
-    public struct LandActions
-    {
-        private @InputActions m_Wrapper;
-        public LandActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Jump => m_Wrapper.m_Land_Jump;
-        public InputAction @Walk => m_Wrapper.m_Land_Walk;
-        public InputAction @Climb => m_Wrapper.m_Land_Climb;
-        public InputAction @Run => m_Wrapper.m_Land_Run;
-        public InputActionMap Get() { return m_Wrapper.m_Land; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(LandActions set) { return set.Get(); }
-        public void AddCallbacks(ILandActions instance)
+        private readonly InputActionMap m_Water;
+        private List<IWaterActions> m_WaterActionsCallbackInterfaces = new List<IWaterActions>();
+        private readonly InputAction m_Water_Newaction;
+        public struct WaterActions
         {
-            if (instance == null || m_Wrapper.m_LandActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_LandActionsCallbackInterfaces.Add(instance);
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
-            @Walk.started += instance.OnWalk;
-            @Walk.performed += instance.OnWalk;
-            @Walk.canceled += instance.OnWalk;
-            @Climb.started += instance.OnClimb;
-            @Climb.performed += instance.OnClimb;
-            @Climb.canceled += instance.OnClimb;
-            @Run.started += instance.OnRun;
-            @Run.performed += instance.OnRun;
-            @Run.canceled += instance.OnRun;
-        }
+            private @InputActions m_Wrapper;
+            public WaterActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Newaction => m_Wrapper.m_Water_Newaction;
+            public InputActionMap Get() { return m_Wrapper.m_Water; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(WaterActions set) { return set.Get(); }
+            public void AddCallbacks(IWaterActions instance)
+            {
+                if (instance == null || m_Wrapper.m_WaterActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_WaterActionsCallbackInterfaces.Add(instance);
+                @Newaction.started += instance.OnNewaction;
+                @Newaction.performed += instance.OnNewaction;
+                @Newaction.canceled += instance.OnNewaction;
+            }
 
-        private void UnregisterCallbacks(ILandActions instance)
-        {
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
-            @Walk.started -= instance.OnWalk;
-            @Walk.performed -= instance.OnWalk;
-            @Walk.canceled -= instance.OnWalk;
-            @Climb.started -= instance.OnClimb;
-            @Climb.performed -= instance.OnClimb;
-            @Climb.canceled -= instance.OnClimb;
-            @Run.started -= instance.OnRun;
-            @Run.performed -= instance.OnRun;
-            @Run.canceled -= instance.OnRun;
-        }
+            private void UnregisterCallbacks(IWaterActions instance)
+            {
+                @Newaction.started -= instance.OnNewaction;
+                @Newaction.performed -= instance.OnNewaction;
+                @Newaction.canceled -= instance.OnNewaction;
+            }
 
-        public void RemoveCallbacks(ILandActions instance)
-        {
-            if (m_Wrapper.m_LandActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
+            public void RemoveCallbacks(IWaterActions instance)
+            {
+                if (m_Wrapper.m_WaterActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
 
-        public void SetCallbacks(ILandActions instance)
-        {
-            foreach (var item in m_Wrapper.m_LandActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_LandActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
+            public void SetCallbacks(IWaterActions instance)
+            {
+                foreach (var item in m_Wrapper.m_WaterActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_WaterActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
         }
-    }
-    public LandActions @Land => new LandActions(this);
-
-    // Air
-    private readonly InputActionMap m_Air;
-    private List<IAirActions> m_AirActionsCallbackInterfaces = new List<IAirActions>();
-    private readonly InputAction m_Air_Newaction;
-    public struct AirActions
-    {
-        private @InputActions m_Wrapper;
-        public AirActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Air_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_Air; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(AirActions set) { return set.Get(); }
-        public void AddCallbacks(IAirActions instance)
+        public WaterActions @Water => new WaterActions(this);
+        public interface ILandActions
         {
-            if (instance == null || m_Wrapper.m_AirActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_AirActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            void OnJump(InputAction.CallbackContext context);
+            void OnWalk(InputAction.CallbackContext context);
+            void OnClimb(InputAction.CallbackContext context);
+            void OnRun(InputAction.CallbackContext context);
         }
-
-        private void UnregisterCallbacks(IAirActions instance)
+        public interface IAirActions
         {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            void OnNewaction(InputAction.CallbackContext context);
         }
-
-        public void RemoveCallbacks(IAirActions instance)
+        public interface IWaterActions
         {
-            if (m_Wrapper.m_AirActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
+            void OnNewaction(InputAction.CallbackContext context);
         }
-
-        public void SetCallbacks(IAirActions instance)
-        {
-            foreach (var item in m_Wrapper.m_AirActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_AirActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public AirActions @Air => new AirActions(this);
-
-    // Water
-    private readonly InputActionMap m_Water;
-    private List<IWaterActions> m_WaterActionsCallbackInterfaces = new List<IWaterActions>();
-    private readonly InputAction m_Water_Newaction;
-    public struct WaterActions
-    {
-        private @InputActions m_Wrapper;
-        public WaterActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Water_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_Water; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(WaterActions set) { return set.Get(); }
-        public void AddCallbacks(IWaterActions instance)
-        {
-            if (instance == null || m_Wrapper.m_WaterActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_WaterActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        private void UnregisterCallbacks(IWaterActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        public void RemoveCallbacks(IWaterActions instance)
-        {
-            if (m_Wrapper.m_WaterActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IWaterActions instance)
-        {
-            foreach (var item in m_Wrapper.m_WaterActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_WaterActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public WaterActions @Water => new WaterActions(this);
-    public interface ILandActions
-    {
-        void OnJump(InputAction.CallbackContext context);
-        void OnWalk(InputAction.CallbackContext context);
-        void OnClimb(InputAction.CallbackContext context);
-        void OnRun(InputAction.CallbackContext context);
-    }
-    public interface IAirActions
-    {
-        void OnNewaction(InputAction.CallbackContext context);
-    }
-    public interface IWaterActions
-    {
-        void OnNewaction(InputAction.CallbackContext context);
     }
 }

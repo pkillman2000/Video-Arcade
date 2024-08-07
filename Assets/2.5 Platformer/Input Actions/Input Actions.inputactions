@@ -132,7 +132,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "GamePad",
+                    "name": "Left Stick [Gamepad]",
                     "id": "f35e113e-589d-4624-ad8a-7e062f63b297",
                     "path": "1DAxis",
                     "interactions": "",
