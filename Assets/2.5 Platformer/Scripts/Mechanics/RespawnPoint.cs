@@ -1,9 +1,8 @@
-using Platformer.Movement;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Platformer.Movement
+namespace Platformer
 {
     public class RespawnPoint : MonoBehaviour
     {

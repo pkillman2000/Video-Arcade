@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Platformer.Core;
 
-namespace Platformer.Movement
+namespace Platformer
 {
     public class PlayerMovement : MonoBehaviour
     {
@@ -29,18 +28,20 @@ namespace Platformer.Movement
             // Walking
             private bool _walkingInput = false;
             private float _inputWalkingSpeed = 0f;
-            private bool _isTouchingFloor = true;
+            public bool _isTouchingFloor = true;
             // Climbing
             private bool _climbingInput = false;
             private float _inputClimbingSpeed = 0f;
             private bool _isTouchingLadder = false;
             // Running
             private bool _isRunning = false;
+
         // AIR
         // WATER
 
         private Rigidbody _rigidBody;
         private bool _playerAlive = true;
+        private bool _isFlipped = false;
 
         void Start()
         {
@@ -98,6 +99,18 @@ namespace Platformer.Movement
             }
         }
 
+        private void OnCollisionStay(Collision collision)
+        {
+            if (collision.gameObject.tag == "Floor")
+            {
+                _isTouchingFloor = true;
+            }
+
+            if (collision.gameObject.tag == "Ladder")
+            {
+                _isTouchingLadder = true;
+            }
+        }
         private void OnCollisionExit(Collision collision)
         {
             if (collision.gameObject.tag == "Floor")
@@ -120,12 +133,14 @@ namespace Platformer.Movement
                 _inputWalkingSpeed = 1f;
                 // Flip player to right
                 _playerBody.transform.eulerAngles = new Vector3(0f, 0f, 0f);
+                _isFlipped = false;
             }
             else if (obj.ReadValue<float>() < 0)
             {
                 _inputWalkingSpeed = -1f;
                 // Flip player to left
                 _playerBody.transform.eulerAngles = new Vector3(0f, 180f, 0f);
+                _isFlipped = true;
             }
             else
             {
@@ -168,6 +183,11 @@ namespace Platformer.Movement
                 _inputWalkingSpeed = 0;
             }
             //}    
+        }
+
+        public bool GetIsFlipped()
+        {
+            return _isFlipped;
         }
 
         // Jumping

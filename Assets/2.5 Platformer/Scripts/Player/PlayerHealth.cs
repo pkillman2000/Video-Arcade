@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Platformer.Movement;
 
-namespace Platformer.Core
+namespace Platformer
 {
-    public class Health : MonoBehaviour
+    public class PlayerHealth : MonoBehaviour
     {
         [SerializeField]
         private int _maxHealth = 100;
@@ -18,7 +17,7 @@ namespace Platformer.Core
 
         private void Start()
         {
-            _playerMovement = GetComponent<PlayerMovement>();
+            _playerMovement = FindObjectOfType<PlayerMovement>();
             if (_playerMovement == null)
             {
                 Debug.LogError("Player Movement is Null!");

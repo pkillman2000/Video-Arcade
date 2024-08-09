@@ -1,10 +1,9 @@
-using Platformer.Core;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Platformer.Traps
+namespace Platformer
 {
     public class Stomper : MonoBehaviour
     {
@@ -62,7 +61,7 @@ namespace Platformer.Traps
             {
                 Debug.LogError("Player stomped");
                 // Player takes damage
-                Health playerHealth = collision.gameObject.GetComponent<Health>();
+                PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
                 playerHealth.RemoveHealth(_damage);
 
                 // Stop Stomper

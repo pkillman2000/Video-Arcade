@@ -7,6 +7,8 @@ TagManager:
   - Ladder
   - Ceiling
   - Floor
+  - Enemy
+  - Player Missile
   layers:
   - Default
   - TransparentFX

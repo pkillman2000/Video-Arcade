@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace Platformer.Movement
+namespace Platformer
 {
     public partial class @InputActions: IInputActionCollection2, IDisposable
     {
@@ -60,6 +60,15 @@ namespace Platformer.Movement
                     ""name"": ""Run"",
                     ""type"": ""Button"",
                     ""id"": ""1150074b-7741-40c1-925b-a5f5e15fc9b9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""9628a8a9-62e2-403e-80f4-4d0a68653395"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -308,6 +317,28 @@ namespace Platformer.Movement
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""52271131-a345-43ae-b464-f33d54d2326c"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""10f5b0b2-32a5-4ea2-846f-42af50f60354"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -376,6 +407,7 @@ namespace Platformer.Movement
             m_Land_Walk = m_Land.FindAction("Walk", throwIfNotFound: true);
             m_Land_Climb = m_Land.FindAction("Climb", throwIfNotFound: true);
             m_Land_Run = m_Land.FindAction("Run", throwIfNotFound: true);
+            m_Land_Fire = m_Land.FindAction("Fire", throwIfNotFound: true);
             // Air
             m_Air = asset.FindActionMap("Air", throwIfNotFound: true);
             m_Air_Newaction = m_Air.FindAction("New action", throwIfNotFound: true);
@@ -447,6 +479,7 @@ namespace Platformer.Movement
         private readonly InputAction m_Land_Walk;
         private readonly InputAction m_Land_Climb;
         private readonly InputAction m_Land_Run;
+        private readonly InputAction m_Land_Fire;
         public struct LandActions
         {
             private @InputActions m_Wrapper;
@@ -455,6 +488,7 @@ namespace Platformer.Movement
             public InputAction @Walk => m_Wrapper.m_Land_Walk;
             public InputAction @Climb => m_Wrapper.m_Land_Climb;
             public InputAction @Run => m_Wrapper.m_Land_Run;
+            public InputAction @Fire => m_Wrapper.m_Land_Fire;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -476,6 +510,9 @@ namespace Platformer.Movement
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
             }
 
             private void UnregisterCallbacks(ILandActions instance)
@@ -492,6 +529,9 @@ namespace Platformer.Movement
                 @Run.started -= instance.OnRun;
                 @Run.performed -= instance.OnRun;
                 @Run.canceled -= instance.OnRun;
+                @Fire.started -= instance.OnFire;
+                @Fire.performed -= instance.OnFire;
+                @Fire.canceled -= instance.OnFire;
             }
 
             public void RemoveCallbacks(ILandActions instance)
@@ -607,6 +647,7 @@ namespace Platformer.Movement
             void OnWalk(InputAction.CallbackContext context);
             void OnClimb(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
+            void OnFire(InputAction.CallbackContext context);
         }
         public interface IAirActions
         {
