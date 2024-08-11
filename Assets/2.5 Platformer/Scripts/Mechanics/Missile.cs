@@ -57,7 +57,6 @@ namespace Platformer
                 EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
                 enemyHealth.RemoveHealth(_missileDamage);
             }
-            Debug.Log("Missile Destroyed");
             Destroy(this.gameObject);
         }
     }

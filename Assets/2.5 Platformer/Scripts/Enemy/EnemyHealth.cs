@@ -26,7 +26,7 @@ namespace Platformer
 
         private void Die()
         {
-            Debug.Log("Enemy Dead");
+            Destroy(this.gameObject);
         }
     }
 }
