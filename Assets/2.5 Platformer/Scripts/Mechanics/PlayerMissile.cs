@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Platformer
 {
-    public class Missile : MonoBehaviour
+    public class PlayerMissile : MonoBehaviour
     {
         [SerializeField]
         private float _missileSpeed = 10f;
@@ -39,7 +39,7 @@ namespace Platformer
         }
 
         private void MoveMissile()
-        {
+        {            
             if (_playerIsFlipped)
             {
                 transform.position += Vector3.left * _missileSpeed * Time.deltaTime;

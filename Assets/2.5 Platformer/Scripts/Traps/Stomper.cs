@@ -59,22 +59,32 @@ namespace Platformer
             Debug.Log(collision.gameObject.tag);
             if (collision.gameObject.tag == "Player")
             {
-                Debug.LogError("Player stomped");
                 // Player takes damage
                 PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
                 playerHealth.RemoveHealth(_damage);
 
-                // Stop Stomper
-                _canMove = false;
-                StartCoroutine(RestartStomper());
+                PauseStomper();
+            }
+            else if(collision.gameObject.tag == "Enemy")
+            {
+                EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
+                enemyHealth.RemoveHealth(_damage);
 
-                // Ease ceiling back up a little bit;
-                t -= .1f;
-                MoveStomper();
-
+                PauseStomper();
             }
         }
 
+        private void PauseStomper()
+        {
+            // Stop Stomper
+            _canMove = false;
+            StartCoroutine(RestartStomper());
+
+            // Ease ceiling back up a little bit;
+            t -= .1f;
+            MoveStomper();
+
+        }
         IEnumerator RestartStomper()
         {
             yield return new WaitForSeconds(5f);
