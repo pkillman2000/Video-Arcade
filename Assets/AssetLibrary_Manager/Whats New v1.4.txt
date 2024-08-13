@@ -1,0 +1,40 @@
+Prefab Labels:
+
+Added shortcuts at the bottom.
+
+
+The Label Manager:
+
+Now shows a list of your labels as button, click on them to add, remove or toggle labels.
+
+
+
+The Preview Window:
+
+Can now display other objects, not only prefabs.
+
+Now also shows labels.
+
+Added shortcut to the Label Manager.
+
+
+Settings:
+
+Added the "Ignore" label on a Prefab to exclude it.
+
+Added show/hide folder paths in (Included Folders, Excluded Folders)
+
+Added option to show/hide the section from the Label Manager.
+
+Added option to open the Prefab Window automatically when clicking on a Prefab.
+
+
+Bonus tools:
+
+Drop to ground now uses raycast.
+
+Ctrl + space rotate now a script. (Not in options anymore)
+
+SceneGui is now a tool overlay. (Not in options anymore)
+
+Added shortcut to the Prefab Labels
