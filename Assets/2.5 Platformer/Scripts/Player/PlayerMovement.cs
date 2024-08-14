@@ -97,6 +97,15 @@ namespace Platformer
             {
                 _isTouchingLadder = true;
             }
+
+            /* 
+             * Make the player a child of the platform so that
+             * the player will move with the platform.
+            */
+            if(collision.gameObject.tag == "Moving Platform")
+            {
+                this.transform.parent = collision.transform;
+            }
         }
 
         private void OnCollisionStay(Collision collision)
@@ -122,6 +131,15 @@ namespace Platformer
             {
                 _isTouchingLadder = false;
             }
+
+            /*
+             * Remove the player as a child of the platform
+            */
+            if (collision.gameObject.tag == "Moving Platform")
+            {
+                this.transform.parent = null;
+            }
+
         }
 
         // Walking

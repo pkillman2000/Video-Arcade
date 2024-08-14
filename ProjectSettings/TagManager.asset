@@ -9,6 +9,7 @@ TagManager:
   - Floor
   - Enemy
   - Player Missile
+  - Moving Platform
   layers:
   - Default
   - TransparentFX
