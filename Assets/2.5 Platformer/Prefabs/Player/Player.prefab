@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 550677870713198866}
   - component: {fileID: 6946143366786667295}
   - component: {fileID: 2663172408555732855}
-  - component: {fileID: 5114347010386474473}
+  - component: {fileID: 1572448069073478335}
   - component: {fileID: 4880017104162749684}
   - component: {fileID: 8033905273848614844}
   - component: {fileID: 9169135353105680329}
@@ -54,7 +54,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297627786179417715}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -112,7 +112,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &5114347010386474473
+--- !u!54 &1572448069073478335
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393b10428f749b34da70111b573a669d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _missile: {fileID: 7289343139371115318, guid: c9a4148d448bc8846a199e065e6e3924, type: 3}
+  _missile: {fileID: 8858429435157542365, guid: c577f34d3d164d04fbbb9fad798ca431, type: 3}
   _missilePosition: {x: 0.55, y: 0.1, z: 0}
   _maxNumberOfMissiles: 10
   _fireRate: 1

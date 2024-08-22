@@ -23,6 +23,7 @@ namespace Platformer
             {
                 _rigidBody.isKinematic = false;
                 _rigidBody.useGravity = true;
+                Destroy(this.gameObject, 1f);
             }
         }
     }

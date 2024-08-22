@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - Player Missile
   - Moving Platform
+  - Trap
   layers:
   - Default
   - TransparentFX

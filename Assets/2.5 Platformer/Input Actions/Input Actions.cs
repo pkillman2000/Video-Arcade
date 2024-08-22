@@ -73,6 +73,15 @@ namespace Platformer
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use"",
+                    ""type"": ""Button"",
+                    ""id"": ""e8065016-53f0-48ba-a146-526ffb160d17"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -339,6 +348,28 @@ namespace Platformer
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cbe219e7-2fa9-472b-b74a-5a13fc137921"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Use"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eac8853d-494c-4a7d-ba50-72dc625b6a76"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Use"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -408,6 +439,7 @@ namespace Platformer
             m_Land_Climb = m_Land.FindAction("Climb", throwIfNotFound: true);
             m_Land_Run = m_Land.FindAction("Run", throwIfNotFound: true);
             m_Land_Fire = m_Land.FindAction("Fire", throwIfNotFound: true);
+            m_Land_Use = m_Land.FindAction("Use", throwIfNotFound: true);
             // Air
             m_Air = asset.FindActionMap("Air", throwIfNotFound: true);
             m_Air_Newaction = m_Air.FindAction("New action", throwIfNotFound: true);
@@ -480,6 +512,7 @@ namespace Platformer
         private readonly InputAction m_Land_Climb;
         private readonly InputAction m_Land_Run;
         private readonly InputAction m_Land_Fire;
+        private readonly InputAction m_Land_Use;
         public struct LandActions
         {
             private @InputActions m_Wrapper;
@@ -489,6 +522,7 @@ namespace Platformer
             public InputAction @Climb => m_Wrapper.m_Land_Climb;
             public InputAction @Run => m_Wrapper.m_Land_Run;
             public InputAction @Fire => m_Wrapper.m_Land_Fire;
+            public InputAction @Use => m_Wrapper.m_Land_Use;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -513,6 +547,9 @@ namespace Platformer
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
+                @Use.started += instance.OnUse;
+                @Use.performed += instance.OnUse;
+                @Use.canceled += instance.OnUse;
             }
 
             private void UnregisterCallbacks(ILandActions instance)
@@ -532,6 +569,9 @@ namespace Platformer
                 @Fire.started -= instance.OnFire;
                 @Fire.performed -= instance.OnFire;
                 @Fire.canceled -= instance.OnFire;
+                @Use.started -= instance.OnUse;
+                @Use.performed -= instance.OnUse;
+                @Use.canceled -= instance.OnUse;
             }
 
             public void RemoveCallbacks(ILandActions instance)
@@ -648,6 +688,7 @@ namespace Platformer
             void OnClimb(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnFire(InputAction.CallbackContext context);
+            void OnUse(InputAction.CallbackContext context);
         }
         public interface IAirActions
         {

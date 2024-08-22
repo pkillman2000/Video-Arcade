@@ -56,7 +56,6 @@ namespace Platformer
 
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log(collision.gameObject.tag);
             if (collision.gameObject.tag == "Player")
             {
                 // Player takes damage
