@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
+ * This script is used for all of the rising
+ * hazard pit traps - lava, water, spikes...
+ * 
  * Scale this object to cover the area that 
- * will be lava (probably just X and Z axis).  
+ * will be the hazard (probably just X and Z axis).  
  * Enter the current scale 
  * of this object into _cubeX, Y, and Z.
  * Fill Speed is how fast it rises per second.
@@ -14,7 +17,7 @@ using UnityEngine;
  */
 namespace Platformer
 {
-    public class LavaFloor : MonoBehaviour
+    public class RisingHazardPit : MonoBehaviour
     {
         [SerializeField]
         private float _fillSpeed = .1f;
@@ -44,7 +47,7 @@ namespace Platformer
         private float _cubeZ = 4;
 
         private PlayerHealth _playerHealth;
-        public bool _playerTakeDamage = false;
+        private bool _playerTakeDamage = false;
 
         void Start()
         {
@@ -93,7 +96,6 @@ namespace Platformer
         {
             if(trigger.gameObject.tag == "Player")
             {
-                Debug.Log("Trigger Entered");
                 _playerHealth = trigger.gameObject.GetComponent<PlayerHealth>();
                 if(_playerHealth == null)
                 {

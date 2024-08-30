@@ -156,7 +156,7 @@ MonoBehaviour:
   _runSpeed: 10
   _jumpSpeed: 7
   _climbSpeed: 5
-  _respawnPoint: {x: 0, y: 0, z: 0}
+  _respawnPoint: {x: 44, y: 4.05, z: 0}
   _isTouchingFloor: 1
 --- !u!114 &8033905273848614844
 MonoBehaviour:
