@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/00 - Game Core/_Scenes/Main Menu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/2.5 Platformer/_Scenes/2.5 Platformer Splash.unity
+    path: Assets/01 - 2.5 Platformer/_Scenes/2.5 Platformer Splash.unity
     guid: c74558a80cc53394683db807e8569e57
   m_configObjects: {}
