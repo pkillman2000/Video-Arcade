@@ -9,8 +9,9 @@ TagManager:
   - Floor
   - Enemy
   - Player Missile
-  - Moving Platform
-  - Trap
+  - Animated
+  - Teleport
+  - Platform
   layers:
   - Default
   - TransparentFX

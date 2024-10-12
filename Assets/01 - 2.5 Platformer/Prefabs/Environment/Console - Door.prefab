@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3483945355366614673}
   - component: {fileID: 7623343683814608400}
   - component: {fileID: 5291978349152759476}
-  - component: {fileID: 704067337499515621}
   - component: {fileID: 1383090905866690117}
   m_Layer: 0
   m_Name: Status Light
@@ -85,27 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &704067337499515621
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 174522464878059960}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1383090905866690117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,7 +258,7 @@ GameObject:
   - component: {fileID: 4580917111609296842}
   m_Layer: 0
   m_Name: Console
-  m_TagString: Untagged
+  m_TagString: Animated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -398,6 +376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 1276745404131620932}
+  _teleporter: {fileID: 0}
   _statusLight: {fileID: 1383090905866690117}
 --- !u!1 &2368491797721628647
 GameObject:
@@ -410,7 +389,6 @@ GameObject:
   - component: {fileID: 7663257622255686626}
   - component: {fileID: 8666605454519443414}
   - component: {fileID: 7313937866596276524}
-  - component: {fileID: 5192691476642096409}
   - component: {fileID: 3029192679396081765}
   m_Layer: 0
   m_Name: Scrolling Screen
@@ -484,27 +462,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5192691476642096409
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2368491797721628647}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3029192679396081765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,8 +589,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3696357450262094294}
-  - component: {fileID: 2931195313075968617}
-  - component: {fileID: 4106560143950531433}
   m_Layer: 0
   m_Name: Floor (0)
   m_TagString: Untagged
@@ -657,54 +612,6 @@ Transform:
   - {fileID: 1095933911924384026}
   m_Father: {fileID: 6227104879299540209}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2931195313075968617
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3488354614035283274}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &4106560143950531433
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3488354614035283274}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &4723862622207672268
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,8 +859,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4636403682391064948}
-  - component: {fileID: 540569622250389129}
-  - component: {fileID: 7508722922899655652}
   m_Layer: 0
   m_Name: Wall (0)
   m_TagString: Untagged
@@ -977,54 +882,6 @@ Transform:
   - {fileID: 4602208628530684713}
   m_Father: {fileID: 6227104879299540209}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &540569622250389129
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6852375308530004935}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &7508722922899655652
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6852375308530004935}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &7467668676347286271
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +894,7 @@ GameObject:
   - component: {fileID: 5872350783759686934}
   m_Layer: 0
   m_Name: Console - Door
-  m_TagString: Untagged
+  m_TagString: Animated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
